@@ -37,86 +37,6 @@
           </div>
           <!-- isSignInDisabled -->
         </form>
-        <!-- contact us modal starts here -->
-        <div
-          class="modal fade"
-          id="exampleModal"
-          tabindex="-1"
-          aria-labelledby="exampleModalLabel"
-          aria-hidden="true"
-        >
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">
-                  Contact Help
-                </h1>
-                <button
-                  type="button"
-                  class="btn-close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                ></button>
-              </div>
-              <div class="modal-body">
-                <form>
-                  <div class="mb-1">
-                    <label for="recipient-name" class="col-form-label-dialog"
-                      >Your Full Name</label
-                    >
-                    <input
-                      type="text"
-                      class="form-control-dialog"
-                      placeholder="Full Name"
-                      v-model="fullName"
-                      id="recipient-name"
-                    />
-                  </div>
-                  <div class="mb-1">
-                    <label for="recipient-name" class="col-form-label-dialog"
-                      >Your Email</label
-                    >
-                    <input
-                      type="email"
-                      class="form-control-dialog"
-                      placeholder="Full Email"
-                      v-model="fullEmail"
-                      id="recipient-name"
-                    />
-                  </div>
-                  <div class="mb-1">
-                    <label for="recipient-name" class="col-form-label-dialog"
-                      >Subject</label
-                    >
-                    <input
-                      type="text"
-                      class="form-control-dialog"
-                      placeholder="Choose Subject"
-                      v-model="subject"
-                      id="recipient-name"
-                    />
-                  </div>
-                  <div class="mb-1">
-                    <label for="message-text" class="col-form-label-dialog"
-                      >Message</label
-                    >
-                    <textarea
-                      class="form-control-message"
-                      placeholder="Type message here..."
-                      v-model="message"
-                      id="message-text"
-                    ></textarea>
-                  </div>
-                </form>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn-dialog" @click="sendMessage">
-                  Send message
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
         <!-- </section> -->
         <div>
           <button
@@ -151,10 +71,6 @@ const isEmailInvalid = ref(false);
 const isPasswordInvalid = ref(false);
 const router = useRouter();
 const isLoading = ref(false);
-const fullName = ref("");
-const fullEmail = ref("");
-const subject = ref("");
-const message = ref("");
 const areFieldsEmpty = ref(false);
 const rememberMeCheckboxIsChecked = ref(false);
 // const error = ref("");
@@ -197,9 +113,9 @@ const signIn = async () => {
         router.push("/home");
       }, 2000);
       const response = await axios.post(
-        "https://api.vclass.ac:9903/api/v1.1/login",
+        "https://api.vclass.ac:9903/api/v1.1/staff/login",
         {
-          email: email.value,
+          email_phone_number: email.value,
           password: password.value,
         },
         {
@@ -216,7 +132,7 @@ const signIn = async () => {
   } catch (error) {
     isLoading.value = false;
     console.log(error);
-    alert(error);
+    alert("Wrong credentials");
     console.error("Error during log in", error);
   }
 };
@@ -246,29 +162,6 @@ const storedToLocalstorage = () => {
 };
 
 // sending contact message
-const sendMessage = async () => {
-  try {
-    // checking email validity with RegExp
-    const emailRegex = /^[a-z0-9._-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
-    if (
-      fullName.value.trim() === "" ||
-      fullEmail.value.trim() === "" ||
-      !emailRegex.test(String(fullEmail.value).trim()) ||
-      subject.value.trim() === "" ||
-      message.value.trim() === ""
-    ) {
-      areFieldsEmpty.value = true;
-      showWarningDialog();
-      console.log("something is empty");
-      console.log("name", fullName.value);
-    } else {
-      areFieldsEmpty.value = false;
-      console.log("are fields are filled");
-    }
-  } catch (error) {
-    console.log(error);
-  }
-};
 </script>
   
   <style scoped>
@@ -439,70 +332,5 @@ p {
   width: 100%;
   height: 100vh;
   object-fit: cover;
-}
-
-/* contact us dialog */
-.modal-header {
-  margin-top: -3rem !important;
-  border-bottom: none !important;
-}
-.modal-title {
-  top: 2rem !important;
-  margin-left: 6rem !important;
-}
-.btn-close {
-  position: fixed !important;
-  top: 2rem !important;
-  right: 2rem !important;
-  font-size: 8px;
-}
-.btn-close:hover {
-  color: #2a6fb5;
-  opacity: 0.8;
-}
-.btn-close:active {
-  border: none;
-}
-#exampleModal {
-  width: 400px;
-  height: 500px;
-  position: fixed;
-  top: 48%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: white;
-  padding: 20px;
-  border: none;
-  overflow-y: hidden;
-}
-.modal-content {
-  border: none;
-  height: 400px;
-}
-.form-control-dialog {
-  width: 330px !important;
-  height: 2.2rem !important;
-  padding: 2px;
-}
-.form-control-message {
-  width: 330px !important;
-}
-.col-form-label-dialog {
-  font-weight: 500;
-  color: rgba(0, 0, 0, 0.8);
-  margin-top: 0.5rem !important;
-  text-align: left !important;
-}
-.btn-dialog {
-  width: 330px;
-  height: 45px;
-  text-transform: capitalize;
-  background-color: #2a6fb5;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  font-size: 16px;
-  margin: 0 auto !important;
 }
 </style>
