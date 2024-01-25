@@ -28,8 +28,11 @@
             <input type="checkbox" />
             Remember me
           </label>
-          <button class="sign-in-btn" v-if="!isLoading">
-            <!-- :disabled="isSignInDisabled" -->
+          <button
+            class="sign-in-btn"
+            v-if="!isLoading"
+            :disabled="isSignInDisabled"
+          >
             Sign in
           </button>
           <div class="spinner-grow" role="status" v-if="isLoading">
@@ -59,7 +62,7 @@
   
   <script lang="ts" setup>
 //   imports
-import { ref, computed } from "vue";
+import { ref, watchEffect } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
 import Swal from "sweetalert2";
@@ -71,10 +74,9 @@ const isEmailInvalid = ref(false);
 const isPasswordInvalid = ref(false);
 const router = useRouter();
 const isLoading = ref(false);
-const areFieldsEmpty = ref(false);
+const isSignInDisabled = ref(false);
+// const areFieldsEmpty = ref(false);
 const rememberMeCheckboxIsChecked = ref(false);
-// const error = ref("");
-// const isDialogVisible = ref(false);
 
 const showWarningDialog = async () => {
   const result = await Swal.fire({
@@ -99,6 +101,7 @@ const signIn = async () => {
       password.value.length < 6
     ) {
       isEmailInvalid.value = true;
+      isPasswordInvalid.value = true;
       showWarningDialog();
       console.log("email password invalid");
     } else {
@@ -137,8 +140,19 @@ const signIn = async () => {
   }
 };
 
-const isSignInDisabled = computed(() => {
-  return isEmailInvalid.value || isPasswordInvalid.value;
+watchEffect(() => {
+  const emailRegex = /^[a-z0-9._-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
+
+  // Update isEmailInvalid based on the email conditions
+  isEmailInvalid.value =
+    email.value.trim() === "" || !emailRegex.test(String(email.value).trim());
+
+  // Update isPasswordInvalid based on the password conditions
+  isPasswordInvalid.value =
+    password.value.trim() === "" || password.value.length < 6;
+
+  // Update isSignInDisabled based on both email and password conditions
+  isSignInDisabled.value = isEmailInvalid.value || isPasswordInvalid.value;
 });
 
 // storing data to localstorage
