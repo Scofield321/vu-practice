@@ -24,8 +24,8 @@
               placeholder="Your password"
             />
           </div>
-          <label class="remember-me" @click="storedToLocalstorage">
-            <input type="checkbox" />
+          <label class="remember-me" @click="toggleRememberMe">
+            <input type="checkbox" v-model="shouldRememberMe" />
             Remember me
           </label>
           <button
@@ -76,7 +76,7 @@ const router = useRouter();
 const isLoading = ref(false);
 const isSignInDisabled = ref(false);
 // const areFieldsEmpty = ref(false);
-const rememberMeCheckboxIsChecked = ref(false);
+const shouldRememberMe = ref(false);
 
 const showWarningDialog = async () => {
   const result = await Swal.fire({
@@ -128,8 +128,12 @@ const signIn = async () => {
         }
       );
       isLoading.value = false;
-      if (response.data) {
+      if (response.data && response.data.accessToken) {
+        // Storing the access token based on user preference
+        storeAccessToken(response.data.accessToken);
         console.log(response.data);
+      } else {
+        console.log("Login failed");
       }
     }
   } catch (error) {
@@ -155,24 +159,22 @@ watchEffect(() => {
   isSignInDisabled.value = isEmailInvalid.value || isPasswordInvalid.value;
 });
 
-// storing data to localstorage
+// storing data to localstorage or session storage
 
-const storedToLocalstorage = () => {
-  if (rememberMeCheckboxIsChecked.value) {
-    // Get existing emails from local storage
-    const storedEmailString = localStorage.getItem("emails");
-    // since localStorage.getItem( ) returns either a string or null
-    // first checking if the value is null before using it
-    const storedEmails = storedEmailString ? JSON.parse(storedEmailString) : [];
-    // Check if the current email is already stored
-    const isEmailStored = storedEmails.includes(email.value);
-    if (!isEmailStored) {
-      storedEmails.push(email.value);
-      localStorage.setItem("emails", JSON.stringify(storedEmails));
-    }
+const storeAccessToken = (accessToken: string) => {
+  if (shouldRememberMe.value && accessToken) {
+    localStorage.setItem("access_token", accessToken);
+  } else if (!shouldRememberMe.value && accessToken) {
+    sessionStorage.setItem("access_token", accessToken);
   } else {
-    sessionStorage.setItem("emails", email.value);
+    // Remove an existing access token from both local storage and session storage
+    localStorage.removeItem("access_token");
+    sessionStorage.removeItem("access_token");
   }
+};
+// toggling the checkbox
+const toggleRememberMe = () => {
+  shouldRememberMe.value = !shouldRememberMe.value;
 };
 
 // sending contact message
