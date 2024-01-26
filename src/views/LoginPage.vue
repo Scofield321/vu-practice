@@ -80,7 +80,7 @@ const shouldRememberMe = ref(false);
 const showWarningDialog = async () => {
   const result = await Swal.fire({
     title: "Check all Fields",
-    text: "something is wrong with your details you have entered",
+    text: "An account with matching credentials was not found",
     icon: "warning",
     confirmButtonColor: "#3085d6",
   });
@@ -92,16 +92,19 @@ const showWarningDialog = async () => {
 const signIn = async () => {
   try {
     // checking email validity with RegExp
-    const emailRegex = /^[a-z0-9._-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
+    // const emailRegex = /^[a-z0-9._-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
     if (
-      email.value.trim() === "" ||
-      !emailRegex.test(String(email.value).trim()) ||
-      password.value.trim() === "" ||
-      password.value.length < 6
+      email.value.trim() !== "derrick@pesamoni.com" ||
+      password.value.trim() !== "admin.123"
+      // email.value.trim() === "" ||
+      // !emailRegex.test(String(email.value).trim()) ||
+      // password.value.trim() === "" ||
+      // password.value.length < 6
     ) {
       isEmailInvalid.value = true;
       isPasswordInvalid.value = true;
       showWarningDialog();
+      router.push("/login");
       console.log("email password invalid");
     } else {
       isLoading.value = true;
