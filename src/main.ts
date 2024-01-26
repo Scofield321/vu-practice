@@ -1,8 +1,8 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import { createRouter, createWebHistory } from 'vue-router'
-import HomePage from './components/HomePage.vue'
-import LoginPage from './components/LoginPage.vue'
+import HomePage from './views/HomePage.vue'
+import LoginPage from './views/LoginPage.vue'
 
 
 const app = createApp(App)

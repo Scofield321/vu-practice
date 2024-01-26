@@ -60,7 +60,7 @@
   </div>
 </template>
   
-  <script lang="ts" setup>
+  <script lang="ts" setup >
 //   imports
 import { ref, watchEffect } from "vue";
 import axios from "axios";
@@ -75,7 +75,6 @@ const isPasswordInvalid = ref(false);
 const router = useRouter();
 const isLoading = ref(false);
 const isSignInDisabled = ref(false);
-// const areFieldsEmpty = ref(false);
 const shouldRememberMe = ref(false);
 
 const showWarningDialog = async () => {
@@ -133,14 +132,12 @@ const signIn = async () => {
         storeAccessToken(response.data.accessToken);
         console.log(response.data);
       } else {
-        console.log("Login failed");
+        throw Error("Login failed, check your credentials");
       }
     }
   } catch (error) {
     isLoading.value = false;
-    console.log(error);
-    alert("Wrong credentials");
-    console.error("Error during log in", error);
+    alert(error);
   }
 };
 
