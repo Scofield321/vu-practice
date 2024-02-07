@@ -60,122 +60,134 @@
   </div>
 </template>
   
-  <script lang="ts" setup >
-//   imports
+  <script lang="ts">
+import { defineComponent } from "vue";
 import { ref, watchEffect } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
 import Swal from "sweetalert2";
-import "sweetalert2/dist/sweetalert2.min.css";
 
-const email = ref("");
-const password = ref("");
-const isEmailInvalid = ref(false);
-const isPasswordInvalid = ref(false);
-const router = useRouter();
-const isLoading = ref(false);
-const isSignInDisabled = ref(false);
-const shouldRememberMe = ref(false);
+export default defineComponent({
+  setup() {
+    const email = ref("");
+    const password = ref("");
+    const isEmailInvalid = ref(false);
+    const isPasswordInvalid = ref(false);
+    const router = useRouter();
+    const isLoading = ref(false);
+    const isSignInDisabled = ref(false);
+    const shouldRememberMe = ref(false);
 
-const showWarningDialog = async () => {
-  const result = await Swal.fire({
-    title: "Check all Fields",
-    text: "An account with matching credentials was not found",
-    icon: "warning",
-    confirmButtonColor: "#3085d6",
-  });
-  if (result.isConfirmed) {
-    return "";
-  }
-};
-
-const signIn = async () => {
-  try {
-    // checking email validity with RegExp
-    // const emailRegex = /^[a-z0-9._-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
-    if (
-      email.value.trim() !== "derrick@pesamoni.com" ||
-      password.value.trim() !== "admin.123"
-      // email.value.trim() === "" ||
-      // !emailRegex.test(String(email.value).trim()) ||
-      // password.value.trim() === "" ||
-      // password.value.length < 6
-    ) {
-      isEmailInvalid.value = true;
-      isPasswordInvalid.value = true;
-      showWarningDialog();
-      router.push("/login");
-      console.log("email password invalid");
-    } else {
-      isLoading.value = true;
-      // setting timeout for 2 seconds for the loading spinner
-      setTimeout(() => {
-        isLoading.value = false;
-        isEmailInvalid.value = false;
-        isPasswordInvalid.value = false;
-
-        // Redirect to home after the spinner has been shown for 2 seconds
-        router.push("/home");
-      }, 2000);
-      const response = await axios.post(
-        "https://api.vclass.ac:9903/api/v1.1/staff/login",
-        {
-          email_phone_number: email.value,
-          password: password.value,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      isLoading.value = false;
-      if (response.data && response.data.accessToken) {
-        // Storing the access token based on user preference
-        storeAccessToken(response.data.accessToken);
-        console.log(response.data);
-      } else {
-        throw Error("Login failed, check your credentials");
+    const showWarningDialog = async () => {
+      const result = await Swal.fire({
+        title: "Check all Fields",
+        text: "An account with matching credentials was not found",
+        icon: "warning",
+        confirmButtonColor: "#3085d6",
+      });
+      if (result.isConfirmed) {
+        return "";
       }
-    }
-  } catch (error) {
-    isLoading.value = false;
-    alert(error);
-  }
-};
+    };
 
-watchEffect(() => {
-  const emailRegex = /^[a-z0-9._-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
+    const signIn = async () => {
+      try {
+        if (
+          email.value.trim() !== "derrick@pesamoni.com" ||
+          password.value.trim() !== "admin.123"
+        ) {
+          isEmailInvalid.value = true;
+          isPasswordInvalid.value = true;
+          showWarningDialog();
+          router.push("/login");
+          console.log("email password invalid");
+        } else {
+          isLoading.value = true;
+          // setting timeout for 2 seconds for the loading spinner
+          setTimeout(() => {
+            isLoading.value = false;
+            isEmailInvalid.value = false;
+            isPasswordInvalid.value = false;
 
-  // Update isEmailInvalid based on the email conditions
-  isEmailInvalid.value =
-    email.value.trim() === "" || !emailRegex.test(String(email.value).trim());
+            // Redirect to home after the spinner has been shown for 2 seconds
+            router.push("/home");
+          }, 2000);
+          const response = await axios.post(
+            "https://api.vclass.ac:9903/api/v1.1/staff/login",
+            {
+              email_phone_number: email.value,
+              password: password.value,
+            },
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          isLoading.value = false;
+          if (response.data && response.data.accessToken) {
+            // Storing the access token based on user preference
+            storeAccessToken(response.data.accessToken);
+            // console.log(response.data);
+          } else {
+            throw Error("Login failed, check your credentials");
+          }
+        }
+      } catch (error) {
+        isLoading.value = false;
+        alert(error);
+      }
+    };
 
-  // Update isPasswordInvalid based on the password conditions
-  isPasswordInvalid.value =
-    password.value.trim() === "" || password.value.length < 6;
+    watchEffect(() => {
+      const emailRegex = /^[a-z0-9._-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
 
-  // Update isSignInDisabled based on both email and password conditions
-  isSignInDisabled.value = isEmailInvalid.value || isPasswordInvalid.value;
+      // Update isEmailInvalid based on the email conditions
+      isEmailInvalid.value =
+        email.value.trim() === "" ||
+        !emailRegex.test(String(email.value).trim());
+
+      // Update isPasswordInvalid based on the password conditions
+      isPasswordInvalid.value =
+        password.value.trim() === "" || password.value.length < 6;
+
+      // Update isSignInDisabled based on both email and password conditions
+      isSignInDisabled.value = isEmailInvalid.value || isPasswordInvalid.value;
+    });
+
+    // storing data to localstorage or session storage
+
+    const storeAccessToken = (accessToken: string) => {
+      if (shouldRememberMe.value && accessToken) {
+        localStorage.setItem("access_token", accessToken);
+      } else if (!shouldRememberMe.value && accessToken) {
+        sessionStorage.setItem("access_token", accessToken);
+      } else {
+        // Remove an existing access token from both local storage and session storage
+        localStorage.removeItem("access_token");
+        sessionStorage.removeItem("access_token");
+      }
+    };
+    // toggling the checkbox
+    const toggleRememberMe = () => {
+      shouldRememberMe.value = !shouldRememberMe.value;
+    };
+    return {
+      email,
+      password,
+      isEmailInvalid,
+      isPasswordInvalid,
+      router,
+      isLoading,
+      isSignInDisabled,
+      shouldRememberMe,
+      signIn,
+      showWarningDialog,
+      watchEffect,
+      toggleRememberMe,
+    };
+  },
 });
-
-// storing data to localstorage or session storage
-
-const storeAccessToken = (accessToken: string) => {
-  if (shouldRememberMe.value && accessToken) {
-    localStorage.setItem("access_token", accessToken);
-  } else if (!shouldRememberMe.value && accessToken) {
-    sessionStorage.setItem("access_token", accessToken);
-  } else {
-    // Remove an existing access token from both local storage and session storage
-    localStorage.removeItem("access_token");
-    sessionStorage.removeItem("access_token");
-  }
-};
-// toggling the checkbox
-const toggleRememberMe = () => {
-  shouldRememberMe.value = !shouldRememberMe.value;
-};
 
 // sending contact message
 </script>
