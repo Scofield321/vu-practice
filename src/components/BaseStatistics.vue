@@ -76,8 +76,7 @@
   background-color: #df292c;
   width: 11rem !important;
   border-radius: 5px;
-  margin-right: 1rem;
-  margin-top: -2.5rem;
+  margin: -2.5rem 1rem 0 0;
 }
 
 .carousel-inner {
@@ -93,7 +92,6 @@
   background-color: #d1cdcd;
   border: none;
   border-radius: 50%;
-  /* padding: 10px; */
   height: 30px;
   width: 30px;
   position: absolute;

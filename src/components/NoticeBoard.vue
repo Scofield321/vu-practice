@@ -302,8 +302,7 @@ svg {
   margin-top: 2rem;
 }
 button {
-  margin-top: -3rem;
-  margin-left: -4rem;
+  margin: -3rem 0 0 -4rem;
   text-align: center;
 }
 </style>

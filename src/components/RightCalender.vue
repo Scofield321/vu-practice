@@ -81,15 +81,9 @@ const isToday = (date: number) => {
 };
 </script>
 
-<style scoped>
-/* Your styles here */
-</style>
-
-  
   <style scoped>
 .calendar {
   background-color: white;
-  /* width: 40rem; */
   width: 100%;
   margin: 2.5rem 2rem 0 -2rem;
 }
@@ -136,7 +130,6 @@ i {
   padding: 0.5rem;
   font-size: 10px;
   font-weight: 500;
-  /* border-bottom: 1px solid #ccc; */
 }
 
 .blank-day {
@@ -148,16 +141,13 @@ i {
   padding: 6px;
   font-size: 10px;
   font-weight: 500;
-  /* border-bottom: 1px solid #ccc; */
 }
 
 .today {
-  /* background-color: lightblue; */
   border: 1px solid #2a6fb5;
 }
 h2 {
   font-size: 0.8rem;
-  /* margin: 1rem; */
 }
 .upcoming-lectures {
   margin: 3rem 0 0 1rem;

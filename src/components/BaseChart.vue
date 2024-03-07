@@ -28,6 +28,3 @@ const chartOptions = ref({
   },
 });
 </script>
-
-<style>
-</style>

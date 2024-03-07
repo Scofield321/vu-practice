@@ -16,15 +16,13 @@
   justify-content: space-between;
   align-items: center;
   width: 78vw;
-  margin-left: 0.5rem;
-  margin-top: 2rem;
+  margin: 2rem 0 0 0.5rem;
 }
 
 img {
   border-radius: 50%;
   height: 30px;
   width: 30px;
-  /* margin-right: -10rem; */
 }
 h2 {
   font-size: 1rem;

@@ -26,7 +26,7 @@
   
 <script lang="ts" setup>
 import { ref } from "vue";
-
+// setting the percentage in the middle to 0% to make the chart empty
 const percentage = ref(0);
 </script>
   
@@ -56,18 +56,15 @@ h3 {
   justify-content: center;
 }
 p {
-  padding-right: 8px;
+  padding: 0 8px;
   font-size: 10px;
   color: gray;
-  padding-left: 1rem;
 }
 hr {
   width: 90%;
   height: 1px;
-  /* text-align: center; */
   background-color: gray;
   border: none;
-  /* flex: 1; */
   margin: 1rem;
 }
 
@@ -77,8 +74,7 @@ hr {
   max-width: 600px;
 }
 .demo-progress .el-progress--circle {
-  margin-right: 15px;
-  margin-top: 2rem;
+  margin: 2rem 15px 0 0;
 }
 
 /* live-class-middle-part */
