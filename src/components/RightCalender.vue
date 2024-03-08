@@ -120,7 +120,7 @@ i {
 }
 .days {
   display: grid;
-  padding: 5px;
+  padding: 0.5rem;
   grid-template-columns: repeat(7, 1fr);
   margin-top: 1rem;
 }
@@ -135,17 +135,21 @@ i {
 .blank-day {
   padding: 0.5rem;
 }
-
 .date {
-  text-align: center;
-  padding: 6px;
-  font-size: 10px;
-  font-weight: 500;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.7rem;
 }
-
 .today {
   border: 1px solid #2a6fb5;
+  border-radius: 1px;
+  width: 20px;
+  height: 20px;
 }
+
 h2 {
   font-size: 0.8rem;
 }

@@ -47,7 +47,10 @@
           data-bs-target="#carouselExampleControlsNoTouching"
           data-bs-slide="prev"
         >
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span
+            class="carousel-control-prev-icon custom-icon"
+            aria-hidden="true"
+          ></span>
           <span class="visually-hidden">Previous</span>
         </button>
         <button
@@ -56,7 +59,10 @@
           data-bs-target="#carouselExampleControlsNoTouching"
           data-bs-slide="next"
         >
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span
+            class="carousel-control-next-icon custom-icon"
+            aria-hidden="true"
+          ></span>
           <span class="visually-hidden">Next</span>
         </button>
       </div>
@@ -89,7 +95,7 @@
 
 .carousel-control-prev,
 .carousel-control-next {
-  background-color: #d1cdcd;
+  background-color: #888787;
   border: none;
   border-radius: 50%;
   height: 30px;
@@ -98,11 +104,13 @@
   top: 50%;
   transform: translateY(-50%);
   z-index: 1;
-  margin: 0;
-  padding: 0;
+}
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+  background-color: rgba(0, 0, 0, 1);
 }
 .carousel-control-prev {
-  left: 55px;
+  left: 4rem;
 }
 
 .carousel-control-next {
@@ -110,10 +118,10 @@
 }
 .carousel-control-prev-icon,
 .carousel-control-next-icon {
-  font-size: 10px;
-}
-.sliding-cards p {
-  font-size: 15px;
+  width: 12px;
+  height: 12px;
+  color: white;
+  font-weight: 900;
 }
 
 .card h2,

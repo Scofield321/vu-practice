@@ -3,7 +3,7 @@
     <div>
       <h2>Admin.<span>VClass Admin</span></h2>
     </div>
-    <div>
+    <div class="bell-user-image">
       <i class="fas fa-bell"></i>
       <img src="@/assets/user-images.jpeg" alt="user-image" />
     </div>
@@ -48,5 +48,10 @@ p {
 i {
   margin-right: 1rem;
   font-size: 1.2rem;
+}
+.bell-user-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
